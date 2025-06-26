@@ -16,6 +16,7 @@ class $modify(ProGJBaseGameLayer, GJBaseGameLayer) {
         float m_scaleMultiplier = 1.f;
         int m_checkCollisions = 0;
         bool m_isEating = false;
+        bool m_isEatingBecauseButton = false;
     };
     
     void startEating();

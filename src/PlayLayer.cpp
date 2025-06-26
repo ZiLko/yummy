@@ -15,7 +15,9 @@ void ProPlayLayer::setupHasCompleted() {
     
     this->template addEventListener<InvokeBindFilter>([this](InvokeBindEvent* event) {
         ProGJBaseGameLayer* bgl = static_cast<ProGJBaseGameLayer*>(m_player1->m_gameLayer);
-        if (bgl->m_fields->m_isEating) return ListenerResult::Propagate;
+        auto f = bgl->m_fields.self();
+        if (f->m_isEatingBecauseButton) return ListenerResult::Propagate;
+        f->m_isEatingBecauseButton = false;
         event->isDown() ? bgl->startEating() : bgl->stopEating();
         return ListenerResult::Propagate;
     }, "consume-decoration"_spr);
@@ -74,6 +76,8 @@ void ProPlayLayer::onConsume(CCObject* sender) {
     if (!sender || sender->getTag() != 6252025) return;
     ProGJBaseGameLayer* bgl = static_cast<ProGJBaseGameLayer*>(m_player1->m_gameLayer);
     auto f = bgl->m_fields.self();
+    if (!f->m_isEatingBecauseButton) return;
     f->m_isEating = !f->m_isEating;
+    f->m_isEatingBecauseButton = !f->m_isEatingBecauseButton;
     f->m_isEating ? bgl->startEating() : bgl->stopEating();
 }
