@@ -7,7 +7,7 @@ $on_mod(Loaded) {
     using namespace keybinds;
     
     BindManager::get()->registerBindable({
-        "backflip"_spr,
+        "consume-decoration"_spr,
         "Eat Decoration!",
         "Hold to eat the level decoration!",
         { Keybind::create(KEY_E, Modifier::None) },
