@@ -136,6 +136,7 @@ void ProGJBaseGameLayer::resetLevelVariables() {
 void ProGJBaseGameLayer::resetYummyFieldsVariables() {
     auto f = m_fields.self();
     f->m_scaleMultiplier = 1.f;
+    f->m_scaleMultiplierPlayerTwo = 1.f;
     f->m_checkCollisions = 0;
     f->m_isEating = false;
 }

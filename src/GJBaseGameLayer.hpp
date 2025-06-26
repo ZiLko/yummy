@@ -14,6 +14,7 @@ class $modify(ProGJBaseGameLayer, GJBaseGameLayer) {
         PlayerCollisionDirection m_collisionDirection = PlayerCollisionDirection::Top;
         
         float m_scaleMultiplier = 1.f;
+        float m_scaleMultiplierPlayerTwo = 1.f;
         int m_checkCollisions = 0;
         bool m_isEating = false;
     };
