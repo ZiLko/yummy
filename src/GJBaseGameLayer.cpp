@@ -88,7 +88,7 @@ void ProGJBaseGameLayer::collisionCheckObjects(PlayerObject* p0, gd::vector<Game
     int destroyedObjects = 0;
     
     for (GameObject* obj : f->m_destroyObjects) {
-        if (f->m_destroyedObjects.contains(obj)) continue;
+        if (!obj || f->m_destroyedObjects.contains(obj)) continue;
         float playerPos = 0.f;
         float objPos = 0.f;
         float half = 20 * f->m_scaleMultiplier;
@@ -121,6 +121,5 @@ void ProGJBaseGameLayer::collisionCheckObjects(PlayerObject* p0, gd::vector<Game
         AnimationManager::destroyObject(obj, 3, m_objectLayer, DestroyAnimation::Break);
     }
     
-    if (destroyedObjects >= 8)
-        shakeCamera(destroyedObjects / 10.f * 0.09f, destroyedObjects / 10.f * 0.09f, 0);
+    if (destroyedObjects >= 8) shakeCamera(destroyedObjects / 10.f * 0.09f, destroyedObjects / 10.f * 0.09f, 0);
 }
