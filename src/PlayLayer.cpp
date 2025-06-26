@@ -71,9 +71,10 @@ void ProPlayLayer::destroyPlayer(PlayerObject* player, GameObject* obj) {
 }
 
 void ProPlayLayer::onConsume(CCObject* sender) {
-    if (!sender || sender->getTag() != 6252025) return;
     ProGJBaseGameLayer* bgl = static_cast<ProGJBaseGameLayer*>(m_player1->m_gameLayer);
     auto f = bgl->m_fields.self();
+    log::info("f->m_isEating: {}", f->m_isEating);
+    log::info("!f->m_isEating: {}", !f->m_isEating);
     f->m_isEating = !f->m_isEating;
     f->m_isEating ? bgl->stopEating() : bgl->startEating();
 }
