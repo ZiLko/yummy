@@ -84,3 +84,9 @@ void ProPlayerObject::collidedWithObject(float p0, GameObject* p1, CCRect p2, bo
         AnimationManager::destroyObject(p1, 3, m_gameLayer->m_objectLayer, DestroyAnimation::Break);
     }
 }
+
+void ProPlayerObject::togglePlayerScale(bool toMini, bool p1) {
+    PlayerObject::togglePlayerScale(toMini, p1);
+    if (!this->m_gameLayer) return;
+    static_cast<ProGJBaseGameLayer*>(this->m_gameLayer)->reactToPlayerScaleToggle(this, toMini);
+}

@@ -141,13 +141,8 @@ void ProGJBaseGameLayer::resetYummyFieldsVariables() {
     f->m_isEating = false;
 }
 
-void ProGJBaseGameLayer::togglePlayerScale(bool toMini, bool p1) {
-    GJBaseGameLayer::togglePlayerScale(toMini, p1);
-    ProGJBaseGameLayer::reactToPlayerScaleToggle(toMini);
-}
-
-void ProGJBaseGameLayer::reactToPlayerScaleToggle(bool toMini) {
+void ProGJBaseGameLayer::reactToPlayerScaleToggle(PlayerObject* player, bool toMini) {
     auto f = m_fields.self();
-    f->m_scaleMultiplier *= toMini ? .6f : (1.f / .6f);
-    f->m_scaleMultiplierPlayerTwo *= toMini ? .6f : (1.f / .6f);
+    if (player == m_player1) f->m_scaleMultiplier *= toMini ? .6f : (1.f / .6f);
+    else if (player == m_player2) f->m_scaleMultiplierPlayerTwo *= toMini ? .6f : (1.f / .6f);
 }

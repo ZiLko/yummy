@@ -22,5 +22,6 @@ class $modify(ProPlayerObject, PlayerObject) {
     void togglePlayerScale(bool, bool);
     
     void collidedWithObject(float, GameObject*, CCRect, bool);
-    
+
+    void togglePlayerScale(bool toMini, bool p1);
 };
