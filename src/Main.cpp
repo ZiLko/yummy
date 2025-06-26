@@ -8,10 +8,10 @@ $on_mod(Loaded) {
     
     BindManager::get()->registerBindable({
         "backflip"_spr,
-        "Do a Backflip!",
-        "Throw a backflip",
+        "Eat Decoration!",
+        "Hold to eat the level decoration!",
         { Keybind::create(KEY_E, Modifier::None) },
-        "My Mod/Awesome Tricks",
+        "Yummy",
         false
     });
 };
