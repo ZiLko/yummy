@@ -78,13 +78,12 @@ void AnimationManager::updateAnimations(float dt, ProGJBaseGameLayer* bgl) {
         m_objectStates.erase(obj);
         
         auto it = std::find(m_animatingObjects.begin(), m_animatingObjects.end(), obj);
-        
-        if (it != m_animatingObjects.end())
-            m_animatingObjects.erase(it);
+
+        if (it != m_animatingObjects.end()) m_animatingObjects.erase(it);
     }
 }
 
-void AnimationManager::tryAbsorbToPlayer(const CCPoint& playerPos, GameObject* obj, float& scaleMult, std::vector<GameObject*>& toRemove) {
+void AnimationManager::tryAbsorbToPlayer(ProGJBaseGameLayer* bgl, const CCPoint& playerPos, GameObject* obj, ObjectState& state, bool& isFloating, float& scaleMult, std::vector<GameObject*>& toRemove) {
     auto objPos = obj->getPosition();
     if (ccpDistance(playerPos, objPos) < 20 * scaleMult) {
         CCPoint targetPos = ccpLerp(objPos, playerPos, state.time / 25.f);
