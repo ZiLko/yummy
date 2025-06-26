@@ -70,8 +70,8 @@ void AnimationManager::updateAnimations(float dt, ProGJBaseGameLayer* bgl) {
         float rot = (state.targetRotation - state.startRotation) * state.time / 2.f;
         obj->setRotation(state.startRotation + rot);
 
-        AnimationManager::tryAbsorbToPlayer(bgl->m_player1->getPosition(), f->m_scaleMultiplier, toRemove);
-        AnimationManager::tryAbsorbToPlayer(bgl->m_player2->getPosition(), f->m_scaleMultiplierPlayerTwo, toRemove);
+        AnimationManager::tryAbsorbToPlayer(bgl->m_player1->getPosition(), obj, f->m_scaleMultiplier, toRemove);
+        AnimationManager::tryAbsorbToPlayer(bgl->m_player2->getPosition(), obj, f->m_scaleMultiplierPlayerTwo, toRemove);
     }
     
     for (GameObject* obj : toRemove) {
@@ -84,7 +84,7 @@ void AnimationManager::updateAnimations(float dt, ProGJBaseGameLayer* bgl) {
     }
 }
 
-void AnimationManager::tryAbsorbToPlayer(const CCPoint& playerPos, float& scaleMult, std::vector<GameObject*>& toRemove) {
+void AnimationManager::tryAbsorbToPlayer(const CCPoint& playerPos, GameObject* obj, float& scaleMult, std::vector<GameObject*>& toRemove) {
     auto objPos = obj->getPosition();
     if (ccpDistance(playerPos, objPos) < 20 * scaleMult) {
         CCPoint targetPos = ccpLerp(objPos, playerPos, state.time / 25.f);
