@@ -69,7 +69,7 @@ void ProGJBaseGameLayer::processMoveActions() {
 
 void ProGJBaseGameLayer::collisionCheckObjects(PlayerObject* player, gd::vector<GameObject*>* p1, int p2, float p3) {      
     GJBaseGameLayer::collisionCheckObjects(player, p1, p2, p3);
-    if (LevelEditorLayer::get() || (player != m_player1)) return;
+    if (LevelEditorLayer::get() || player != m_player1) return;
     
     auto f = m_fields.self();
     
