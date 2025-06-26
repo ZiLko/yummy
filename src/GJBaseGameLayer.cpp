@@ -65,7 +65,9 @@ void ProGJBaseGameLayer::collisionCheckObjects(PlayerObject* p0, gd::vector<Game
     
     f->m_checkCollisions--;
         
-    for (GameObject* obj : *p1) {
+    for (int i = 0; i < p2; i++) {
+        GameObject* obj = p1->at(i);
+        if (!obj) continue;
         bool valid = false;
         
         if (f->m_collisionDirection == PlayerCollisionDirection::Top)
