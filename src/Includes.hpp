@@ -28,8 +28,8 @@ struct ObjectState {
 };
 
 namespace Vars {
-    float volumeSetting = 100.f;
-    float getVolume() {
+    inline float volumeSetting = 100.f;
+    inline float getVolume() {
         return volumeSetting;
     }
 }
