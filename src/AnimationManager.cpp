@@ -72,7 +72,7 @@ void AnimationManager::updateAnimations(float dt, ProGJBaseGameLayer* bgl) {
         obj->setRotation(state.startRotation + rot);
         
         AnimationManager::tryAbsorbToPlayer(bgl, bgl->m_player1, obj, state, isFloating, f->m_scaleMultiplier, toRemove);
-        if (bgl->m_gameState.m_isDualMode) AnimationManager::tryAbsorbToPlayer(bgl, bgl->m_player2, obj, state, isFloating, f->m_scaleMultiplier, toRemove);
+        if (bgl->m_gameState.m_isDualMode) AnimationManager::tryAbsorbToPlayer(bgl, bgl->m_player2, obj, state, isFloating, f->m_scaleMultiplierPlayerTwo, toRemove);
     }
     
     for (GameObject* obj : toRemove) {
@@ -85,6 +85,7 @@ void AnimationManager::updateAnimations(float dt, ProGJBaseGameLayer* bgl) {
 }
 
 void AnimationManager::tryAbsorbToPlayer(ProGJBaseGameLayer* bgl, PlayerObject* player, GameObject* obj, ObjectState& state, bool& isFloating, float& scaleMult, std::vector<GameObject*>& toRemove) {
+    if (std::find(toRemove.begin(), toRemove.end(), obj) != toRemove.end()) return; // dont push back same obj to the vector twice
     CCPoint targetPos = ccpLerp(obj->getPosition(), player->getPosition(), state.time / 25.f);
         
     CCPoint delta = targetPos - obj->getPosition();
