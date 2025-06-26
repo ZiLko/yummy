@@ -16,8 +16,8 @@ $on_mod(Loaded) {
         false
     });
     #endif
-    volumeSetting = Mod::get()->getSettingValue<int64_t>("volume");
+    Vars::volumeSetting = Mod::get()->getSettingValue<int64_t>("volume");
     listenForSettingChanges("volume", [](int64_t newVolume) {
-		volumeSetting = newVolume;
+		Vars::volumeSetting = newVolume;
 	});
 };

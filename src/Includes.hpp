@@ -27,4 +27,6 @@ struct ObjectState {
     CCPoint floatTo = ccp(0, 0);
 };
 
-float volumeSetting = 100.f;
+namespace Vars {
+    float volumeSetting = 100.f;
+}
