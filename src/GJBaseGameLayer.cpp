@@ -56,7 +56,7 @@ void ProGJBaseGameLayer::processMoveActions() {
     // }
 }
 
-void ProGJBaseGameLayer::collisionCheckObjects(PlayerObject* p0, std::vector<GameObject*>* p1, int p2, float p3) {      
+void ProGJBaseGameLayer::collisionCheckObjects(PlayerObject* p0, gd::vector<GameObject*>* p1, int p2, float p3) {      
     GJBaseGameLayer::collisionCheckObjects(p0, p1, p2, p3);
     
     auto f = m_fields.self();
