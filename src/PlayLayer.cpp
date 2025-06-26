@@ -76,5 +76,5 @@ void ProPlayLayer::onConsume(CCObject* sender) {
     log::info("f->m_isEating: {}", f->m_isEating);
     log::info("!f->m_isEating: {}", !f->m_isEating);
     f->m_isEating = !f->m_isEating;
-    f->m_isEating ? bgl->stopEating() : bgl->startEating();
+    f->m_isEating ? bgl->startEating() : bgl->stopEating();
 }
