@@ -60,10 +60,10 @@ void ProGJBaseGameLayer::processMoveActions() {
             obj->m_objectType = GameObjectType::Decoration;
             AnimationManager::get().tryStartAbsorbing(obj);
         }
-        else if (m_gameState.m_isDualMode && ccpDistance(m_player2->getPosition(), obj->getPosition()) < 20 * f->m_scaleMultiplierPlayerTwo + 125) {
-            obj->m_objectType = GameObjectType::Decoration;
-            AnimationManager::get().tryStartAbsorbing(obj);
-        }
+        // else if (m_gameState.m_isDualMode && ccpDistance(m_player2->getPosition(), obj->getPosition()) < 20 * f->m_scaleMultiplierPlayerTwo + 125) {
+        //     obj->m_objectType = GameObjectType::Decoration;
+        //     AnimationManager::get().tryStartAbsorbing(obj);
+        // }
     }
 
     // for (CCMoveCNode* obj : m_effectManager->m_unkVector6c0) {
