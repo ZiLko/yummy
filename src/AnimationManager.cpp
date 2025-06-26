@@ -33,7 +33,8 @@ void AnimationManager::tryStartAbsorbing(GameObject* obj) {
 
 
 void AnimationManager::stopAbsorbingAll(const CCPoint& pos) {
-    for (GameObject* obj : m_animatingObjects) if (obj) stopAbsorbing(obj, pos);
+    for (GameObject* obj : m_animatingObjects)
+        stopAbsorbing(obj, pos);
 }
 
 void AnimationManager::stopAbsorbing(GameObject* obj, const CCPoint& pos) {
@@ -69,38 +70,33 @@ void AnimationManager::updateAnimations(float dt, ProGJBaseGameLayer* bgl) {
         
         float rot = (state.targetRotation - state.startRotation) * state.time / 2.f;
         obj->setRotation(state.startRotation + rot);
-
-        AnimationManager::tryAbsorbToPlayer(bgl, bgl->m_player1->getPosition(), obj, state, isFloating, f->m_scaleMultiplier, toRemove);
-        // if (bgl->m_gameState.m_isDualMode) AnimationManager::tryAbsorbToPlayer(bgl, bgl->m_player2->getPosition(), obj, state, isFloating, f->m_scaleMultiplierPlayerTwo, toRemove);
+        
+        CCPoint targetPos = ccpLerp(obj->getPosition(), bgl->m_player1->getPosition(), state.time / 25.f);
+        
+        CCPoint delta = targetPos - obj->getPosition();
+        CCArray* moveArray = CCArray::create(obj, nullptr);
+        bgl->moveObjects(moveArray, delta.x, delta.y, false);
+        
+        // log::debug("{}", progress);
+        
+        if (ccpDistance(bgl->m_player1->getPosition(), obj->getPosition()) < 20 * f->m_scaleMultiplier) {
+            if (!isFloating) {
+                obj->m_isDisabled  = true;
+                obj->m_isDisabled2 = true;
+                f->m_scaleMultiplier += GROW_RATE;
+            }
+            
+            toRemove.push_back(obj);
+        }
     }
     
     for (GameObject* obj : toRemove) {
         m_objectStates.erase(obj);
         
         auto it = std::find(m_animatingObjects.begin(), m_animatingObjects.end(), obj);
-
-        if (it != m_animatingObjects.end()) m_animatingObjects.erase(it);
-    }
-}
-
-void AnimationManager::tryAbsorbToPlayer(ProGJBaseGameLayer* bgl, const CCPoint& playerPos, GameObject* obj, ObjectState& state, bool& isFloating, float& scaleMult, std::vector<GameObject*>& toRemove) {
-    auto objPos = obj->getPosition();
-    if (ccpDistance(playerPos, objPos) < 20 * scaleMult) {
-        CCPoint targetPos = ccpLerp(objPos, playerPos, state.time / 25.f);
         
-        CCPoint delta = targetPos - objPos;
-        CCArray* moveArray = CCArray::create(obj, nullptr);
-        bgl->moveObjects(moveArray, delta.x, delta.y, false);
-        
-        // log::debug("{}", progress);
-    
-        if (!isFloating) {
-            obj->m_isDisabled  = true;
-            obj->m_isDisabled2 = true;
-            scaleMult += GROW_RATE;
-        }
-        
-        toRemove.push_back(obj);
+        if (it != m_animatingObjects.end())
+            m_animatingObjects.erase(it);
     }
 }
 
