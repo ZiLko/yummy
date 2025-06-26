@@ -23,9 +23,9 @@ void ProPlayLayer::setupHasCompleted() {
 
     // #ifdef GEODE_IS_MOBILE
     // button for mobile
-    if (!m_uiLayer || !m_uiLayer->m_pauseBtn) return;
+    if (!m_uiLayer || !m_uiLayer->m_pauseBtn) return log::info("could not find UILayer or its pause button :(");
     CCSprite* consumeSprite = CCSprite::createWithSpriteFrameName("consume.png"_spr);
-    if (!consumeSprite || consumeSprite->getUserObject("geode.texture-loader/fallback")) return;
+    if (!consumeSprite || consumeSprite->getUserObject("geode.texture-loader/fallback")) return log::info("could not create sprite consume.png_spr");
     CCMenuItemSpriteExtra* consumeButton = CCMenuItemSpriteExtra::create(consumeSprite, this, menu_selector(ProPlayLayer::onConsume));
     consumeButton->setID("consume-button-mobile-only"_spr);
     consumeButton->setTag(6252025);
