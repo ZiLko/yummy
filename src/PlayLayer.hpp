@@ -6,10 +6,6 @@
 
 class $modify(ProPlayLayer, PlayLayer) {
 
-    struct Fields {
-        bool m_hungry = false;
-    };
-
     void setupHasCompleted();
 
     void addObject(GameObject*);
