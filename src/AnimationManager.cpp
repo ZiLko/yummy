@@ -148,5 +148,5 @@ void AnimationManager::playResourcesSound(const std::string& soundStr) {
 
     system->createSound((Mod::get()->getResourcesDir() / soundStr).string().c_str(), FMOD_DEFAULT, nullptr, &sound);
     system->playSound(sound, nullptr, false, &c);
-    c->setVolume(Vars::volumeSetting / 100.f);
+    c->setVolume(Vars::getVolume() / 100.f);
 }
