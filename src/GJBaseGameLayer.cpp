@@ -50,9 +50,9 @@ void ProGJBaseGameLayer::processMoveActions() {
             AnimationManager::get().tryStartAbsorbing(obj);
         }
     }
-     
+
     // for (CCMoveCNode* obj : m_effectManager->m_unkVector6c0) {
-         
+
     // }
 }
 

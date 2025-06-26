@@ -6,7 +6,7 @@
 #ifndef GEODE_IS_IOS
 #include <geode.custom-keybinds/include/Keybinds.hpp>
 #endif
-    
+
 void ProPlayLayer::setupHasCompleted() {
     PlayLayer::setupHasCompleted();
     
