@@ -27,5 +27,8 @@ class $modify(ProGJBaseGameLayer, GJBaseGameLayer) {
     void processMoveActions();
     
     void collisionCheckObjects(PlayerObject*, gd::vector<GameObject*>*, int, float);
-		
+
+    void resetLevelVariables();
+
+    void resetYummyFieldsVariables();
 };

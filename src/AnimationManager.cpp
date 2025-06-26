@@ -140,7 +140,7 @@ void AnimationManager::destroyObject(GameObject* obj, int pieces, CCNode* object
 }
 
 
-void AnimationManager::playSound(const std::string& soundStr) {
+void AnimationManager::playResourcesSound(const std::string& soundStr) {
     auto system = FMODAudioEngine::sharedEngine()->m_system;
     log::debug("d");
         

@@ -56,7 +56,7 @@ void ProPlayLayer::destroyPlayer(PlayerObject* player, GameObject* obj) {
     
     if (obj) {
         AnimationManager::destroyObject(obj, 1, m_objectLayer, DestroyAnimation::Pop);
-        AnimationManager::playSound("boop.mp3");
+        AnimationManager::playResourcesSound("boop.mp3");
     } else {
         auto f = static_cast<ProGJBaseGameLayer*>(static_cast<GJBaseGameLayer*>(this))->m_fields.self();
         

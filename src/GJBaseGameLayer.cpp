@@ -4,16 +4,19 @@
 #include <random>
 
 void ProGJBaseGameLayer::startEating() {
+    if (LevelEditorLayer::get()) return;
     m_fields->m_isEating = true;
 }
 
 void ProGJBaseGameLayer::stopEating() {
+    if (LevelEditorLayer::get()) return;
     m_fields->m_isEating = false;
     AnimationManager::get().stopAbsorbingAll(m_player1->getPosition());
 }
 
 void ProGJBaseGameLayer::processCommands(float dt) {
     GJBaseGameLayer::processCommands(dt);
+    if (LevelEditorLayer::get()) return;
     
     AnimationManager::get().updateAnimations(dt, this);
     
@@ -38,6 +41,7 @@ void ProGJBaseGameLayer::processCommands(float dt) {
 
 void ProGJBaseGameLayer::processMoveActions() {
     GJBaseGameLayer::processMoveActions();
+    if (LevelEditorLayer::get()) return;
     
     //m_effectManager->m_unkVector6d8.size(), m_effectManager->m_unkVector6f0.size()
     auto f = m_fields.self();
@@ -58,6 +62,7 @@ void ProGJBaseGameLayer::processMoveActions() {
 
 void ProGJBaseGameLayer::collisionCheckObjects(PlayerObject* p0, gd::vector<GameObject*>* p1, int p2, float p3) {      
     GJBaseGameLayer::collisionCheckObjects(p0, p1, p2, p3);
+    if (LevelEditorLayer::get()) return;
     
     auto f = m_fields.self();
     
@@ -79,8 +84,7 @@ void ProGJBaseGameLayer::collisionCheckObjects(PlayerObject* p0, gd::vector<Game
         else if (f->m_collisionDirection == PlayerCollisionDirection::Right)
             valid = obj->getPositionX() > m_player1->getPositionX();
         
-        if (valid && !f->m_destroyedObjects.contains(obj))
-            f->m_destroyObjects.push_back(obj);
+        if (valid && !f->m_destroyedObjects.contains(obj)) f->m_destroyObjects.push_back(obj);
     }
     
     if (f->m_checkCollisions > 0) return;
@@ -122,4 +126,16 @@ void ProGJBaseGameLayer::collisionCheckObjects(PlayerObject* p0, gd::vector<Game
     }
     
     if (destroyedObjects >= 8) shakeCamera(destroyedObjects / 10.f * 0.09f, destroyedObjects / 10.f * 0.09f, 0);
+}
+
+void ProGJBaseGameLayer::resetLevelVariables() {
+    GJBaseGameLayer::resetLevelVariables();
+    if (!LevelEditorLayer::get()) ProGJBaseGameLayer::resetYummyFieldsVariables();
+}
+
+void ProGJBaseGameLayer::resetYummyFieldsVariables() {
+    auto f = m_fields.self();
+    f->m_scaleMultiplier = 1.f;
+    f->m_checkCollisions = 0;
+    f->m_isEating = false;
 }
