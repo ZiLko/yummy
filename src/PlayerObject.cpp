@@ -64,13 +64,6 @@ void ProPlayerObject::incrementJumps() {
         m_yVelocity *= (scale - 1) * 0.15f + 1;
 }
 
-void ProPlayerObject::togglePlayerScale(bool p0, bool p1) {
-    if (!m_gameLayer) return PlayerObject::togglePlayerScale(p0, p1);
-    // ProGJBaseGameLayer* bgl = static_cast<ProGJBaseGameLayer*>(m_gameLayer);
-    
-    // if (bgl->m_fields->m_scaleMultiplier <= 1.f)
-        // PlayerObject::
-}
 void ProPlayerObject::collidedWithObject(float p0, GameObject* p1, CCRect p2, bool p3) {
     PlayerObject::collidedWithObject(p0, p1, p2, p3);
     
