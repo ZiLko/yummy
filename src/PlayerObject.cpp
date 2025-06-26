@@ -80,6 +80,7 @@ void ProPlayerObject::collidedWithObject(float p0, GameObject* p1, CCRect p2, bo
 
 void ProPlayerObject::togglePlayerScale(bool toMini, bool fromPortal) {
     PlayerObject::togglePlayerScale(toMini, fromPortal);
-    if (!this->m_gameLayer || !fromPortal) return;
-    static_cast<ProGJBaseGameLayer*>(this->m_gameLayer)->reactToPlayerScaleToggle(this, toMini);
+    if (!this->m_gameLayer) return;
+    // if (fromPortal) return;
+    // static_cast<ProGJBaseGameLayer*>(this->m_gameLayer)->reactToPlayerScaleToggle(this, toMini);
 }
