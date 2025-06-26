@@ -70,8 +70,8 @@ void AnimationManager::updateAnimations(float dt, ProGJBaseGameLayer* bgl) {
         float rot = (state.targetRotation - state.startRotation) * state.time / 2.f;
         obj->setRotation(state.startRotation + rot);
 
-        AnimationManager::tryAbsorbToPlayer(bgl->m_player1->getPosition(), obj, f->m_scaleMultiplier, toRemove);
-        AnimationManager::tryAbsorbToPlayer(bgl->m_player2->getPosition(), obj, f->m_scaleMultiplierPlayerTwo, toRemove);
+        AnimationManager::tryAbsorbToPlayer(bgl, bgl->m_player1->getPosition(), obj, state, isFloating, f->m_scaleMultiplier, toRemove);
+        AnimationManager::tryAbsorbToPlayer(bgl, bgl->m_player2->getPosition(), obj, state, isFloating, f->m_scaleMultiplierPlayerTwo, toRemove);
     }
     
     for (GameObject* obj : toRemove) {
