@@ -71,23 +71,7 @@ void AnimationManager::updateAnimations(float dt, ProGJBaseGameLayer* bgl) {
         float rot = (state.targetRotation - state.startRotation) * state.time / 2.f;
         obj->setRotation(state.startRotation + rot);
         
-        CCPoint targetPos = ccpLerp(obj->getPosition(), bgl->m_player1->getPosition(), state.time / 25.f);
-        
-        CCPoint delta = targetPos - obj->getPosition();
-        CCArray* moveArray = CCArray::create(obj, nullptr);
-        bgl->moveObjects(moveArray, delta.x, delta.y, false);
-        
-        // log::debug("{}", progress);
-        
-        if (ccpDistance(bgl->m_player1->getPosition(), obj->getPosition()) < 20 * f->m_scaleMultiplier) {
-            if (!isFloating) {
-                obj->m_isDisabled  = true;
-                obj->m_isDisabled2 = true;
-                f->m_scaleMultiplier += GROW_RATE;
-            }
-            
-            toRemove.push_back(obj);
-        }
+        AnimationManager::tryAbsordToPlayer(bgl, bgl->m_player1, obj, state, isFloating, f->m_scaleMultiplier, toRemove);
     }
     
     for (GameObject* obj : toRemove) {
@@ -97,6 +81,26 @@ void AnimationManager::updateAnimations(float dt, ProGJBaseGameLayer* bgl) {
         
         if (it != m_animatingObjects.end())
             m_animatingObjects.erase(it);
+    }
+}
+
+void AnimationManager::tryAbsorbToPlayer(ProGJBaseGameLayer* bgl, PlayerObject* player, GameObject* obj, ObjectState& state, bool& isFloating, float& scaleMult, std::vector<GameObject*>& toRemove) {
+    CCPoint targetPos = ccpLerp(obj->getPosition(), player->getPosition(), state.time / 25.f);
+        
+    CCPoint delta = targetPos - obj->getPosition();
+    CCArray* moveArray = CCArray::create(obj, nullptr);
+    bgl->moveObjects(moveArray, delta.x, delta.y, false);
+    
+    // log::debug("{}", progress);
+    
+    if (ccpDistance(player->getPosition(), obj->getPosition()) < 20 * f->m_scaleMultiplier) {
+        if (!isFloating) {
+            obj->m_isDisabled  = true;
+            obj->m_isDisabled2 = true;
+            scaleMult += GROW_RATE;
+        }
+        
+        toRemove.push_back(obj);
     }
 }
 
