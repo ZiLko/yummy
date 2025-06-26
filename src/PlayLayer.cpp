@@ -31,7 +31,8 @@ void ProPlayLayer::setupHasCompleted() {
     consumeButton->setTag(6252025);
     m_uiLayer->m_pauseBtn->getParent()->addChild(consumeButton);
     consumeButton->setPosition(m_uiLayer->m_pauseBtn->getPosition());
-    consumeButton->setPositionY(consumeButton->getPositionY() - 20.f);
+    consumeButton->setPositionY(consumeButton->getPositionY() - 30.f);
+    consumeButton->setOpacity(128);
     // add button for mobile here
     // #endif
 }
