@@ -32,4 +32,8 @@ class $modify(ProGJBaseGameLayer, GJBaseGameLayer) {
     void resetLevelVariables();
 
     void resetYummyFieldsVariables();
+
+    void togglePlayerScale(bool toMini, bool p1);
+
+    void reactToPlayerScaleToggle(bool toMini);
 };
