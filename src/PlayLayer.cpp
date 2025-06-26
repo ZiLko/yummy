@@ -5,10 +5,12 @@
 
 #ifndef GEODE_IS_IOS
 #include <geode.custom-keybinds/include/Keybinds.hpp>
+#endif
     
 void ProPlayLayer::setupHasCompleted() {
     PlayLayer::setupHasCompleted();
     
+    #ifndef GEODE_IS_IOS
     using namespace keybinds;
     
     this->template addEventListener<InvokeBindFilter>([this](InvokeBindEvent* event) {
@@ -18,14 +20,19 @@ void ProPlayLayer::setupHasCompleted() {
         
         return ListenerResult::Propagate;
     }, "backflip"_spr);
+    #endif
+
+    // #ifdef GEODE_IS_MOBILE
+    // button for mobile
+    if (!m_uiLayer) return;
+    // add button for mobile here
+    // #endif
 }
-#endif
 
 void ProPlayLayer::addObject(GameObject* p0) {
     PlayLayer::addObject(p0);
-    
-    if (p0->m_objectType == GameObjectType::Decoration)
-        static_cast<ProGJBaseGameLayer*>(m_player1->m_gameLayer)->m_fields->m_allDecoObjects.push_back(p0);
+    if (p0->m_objectType != GameObjectType::Decoration) return;
+    static_cast<ProGJBaseGameLayer*>(m_player1->m_gameLayer)->m_fields->m_allDecoObjects.push_back(p0);
 }
 
 void ProPlayLayer::destroyPlayer(PlayerObject* player, GameObject* obj) {
