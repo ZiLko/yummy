@@ -3,6 +3,7 @@
 #include "GJBaseGameLayer.hpp"
 #include "AnimationManager.hpp"
 
+#ifndef GEODE_IS_IOS
 #include <geode.custom-keybinds/include/Keybinds.hpp>
     
 void ProPlayLayer::setupHasCompleted() {
@@ -18,6 +19,7 @@ void ProPlayLayer::setupHasCompleted() {
         return ListenerResult::Propagate;
     }, "backflip"_spr);
 }
+#endif
 
 void ProPlayLayer::addObject(GameObject* p0) {
     PlayLayer::addObject(p0);
