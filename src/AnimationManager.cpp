@@ -92,7 +92,7 @@ void AnimationManager::tryAbsorbToPlayer(ProGJBaseGameLayer* bgl, PlayerObject* 
     
     // log::debug("{}", progress);
     
-    if (ccpDistance(player->getPosition(), obj->getPosition()) < 20 * f->m_scaleMultiplier) {
+    if (ccpDistance(player->getPosition(), obj->getPosition()) < 20 * scaleMult) {
         if (!isFloating) {
             obj->m_isDisabled  = true;
             obj->m_isDisabled2 = true;
