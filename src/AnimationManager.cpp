@@ -71,7 +71,7 @@ void AnimationManager::updateAnimations(float dt, ProGJBaseGameLayer* bgl) {
         obj->setRotation(state.startRotation + rot);
 
         AnimationManager::tryAbsorbToPlayer(bgl, bgl->m_player1->getPosition(), obj, state, isFloating, f->m_scaleMultiplier, toRemove);
-        AnimationManager::tryAbsorbToPlayer(bgl, bgl->m_player2->getPosition(), obj, state, isFloating, f->m_scaleMultiplierPlayerTwo, toRemove);
+        if (bgl->m_gameState.m_isDualMode) AnimationManager::tryAbsorbToPlayer(bgl, bgl->m_player2->getPosition(), obj, state, isFloating, f->m_scaleMultiplierPlayerTwo, toRemove);
     }
     
     for (GameObject* obj : toRemove) {

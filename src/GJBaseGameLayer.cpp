@@ -59,7 +59,7 @@ void ProGJBaseGameLayer::processMoveActions() {
         if (ccpDistance(m_player1->getPosition(), obj->getPosition()) < 20 * f->m_scaleMultiplier + 125) {
             obj->m_objectType = GameObjectType::Decoration;
             AnimationManager::get().tryStartAbsorbing(obj);
-        } else if (ccpDistance(m_player2->getPosition(), obj->getPosition()) < 20 * f->m_scaleMultiplierPlayerTwo + 125) {
+        } else if (m_gameState.m_isDualMode && ccpDistance(m_player2->getPosition(), obj->getPosition()) < 20 * f->m_scaleMultiplierPlayerTwo + 125) {
             obj->m_objectType = GameObjectType::Decoration;
             AnimationManager::get().tryStartAbsorbing(obj);
         }
@@ -73,6 +73,7 @@ void ProGJBaseGameLayer::processMoveActions() {
 void ProGJBaseGameLayer::collisionCheckObjects(PlayerObject* player, gd::vector<GameObject*>* p1, int p2, float p3) {      
     GJBaseGameLayer::collisionCheckObjects(player, p1, p2, p3);
     if (LevelEditorLayer::get() || (player != m_player1 && player != m_player2)) return;
+    if (!m_gameState.m_isDualMode && player != m_player1) return;
     
     auto f = m_fields.self();
     
