@@ -71,7 +71,7 @@ void AnimationManager::updateAnimations(float dt, ProGJBaseGameLayer* bgl) {
         float rot = (state.targetRotation - state.startRotation) * state.time / 2.f;
         obj->setRotation(state.startRotation + rot);
         
-        AnimationManager::tryAbsordToPlayer(bgl, bgl->m_player1, obj, state, isFloating, f->m_scaleMultiplier, toRemove);
+        AnimationManager::tryAbsorbToPlayer(bgl, bgl->m_player1, obj, state, isFloating, f->m_scaleMultiplier, toRemove);
     }
     
     for (GameObject* obj : toRemove) {
@@ -79,8 +79,7 @@ void AnimationManager::updateAnimations(float dt, ProGJBaseGameLayer* bgl) {
         
         auto it = std::find(m_animatingObjects.begin(), m_animatingObjects.end(), obj);
         
-        if (it != m_animatingObjects.end())
-            m_animatingObjects.erase(it);
+        if (it != m_animatingObjects.end()) m_animatingObjects.erase(it);
     }
 }
 
