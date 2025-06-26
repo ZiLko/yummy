@@ -1,9 +1,10 @@
-#ifndef GEODE_IS_IOS
 #include "Includes.hpp"
-
+#ifndef GEODE_IS_IOS
 #include <geode.custom-keybinds/include/Keybinds.hpp>
+#endif
 
 $on_mod(Loaded) {    
+    #ifndef GEODE_IS_IOS
     using namespace keybinds;
     
     BindManager::get()->registerBindable({
@@ -14,5 +15,9 @@ $on_mod(Loaded) {
         "Yummy",
         false
     });
+    #endif
+    volumeSetting = Mod::get()->getSettingValue<int64_t>("volume");
+    listenForSettingChanges("volume", [](int64_t newVolume) {
+		volumeSetting = newVolume;
+	});
 };
-#endif

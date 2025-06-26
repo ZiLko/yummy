@@ -26,3 +26,5 @@ struct ObjectState {
     bool wasEaten = false;
     CCPoint floatTo = ccp(0, 0);
 };
+
+float volumeSetting = 100.f;

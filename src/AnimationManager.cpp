@@ -1,6 +1,5 @@
 #include "AnimationManager.hpp"
 #include "GJBaseGameLayer.hpp"
-
 #include <random>
 
 AnimationManager& AnimationManager::get() {
@@ -147,8 +146,7 @@ void AnimationManager::playResourcesSound(const std::string& soundStr) {
     FMOD::Sound* sound;
     FMOD::Channel* c;
 
-    FMOD_RESULT result;
-    result = system->createSound((Mod::get()->getResourcesDir() / soundStr).string().c_str(), FMOD_DEFAULT, nullptr, &sound);
-
-    result = system->playSound(sound, nullptr, false, &c);
+    system->createSound((Mod::get()->getResourcesDir() / soundStr).string().c_str(), FMOD_DEFAULT, nullptr, &sound);
+    system->playSound(sound, nullptr, false, &c);
+    c->setVolume(volumeSetting / 100.f);
 }
