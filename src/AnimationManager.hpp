@@ -26,7 +26,7 @@ public:
     
     void updateAnimations(float, ProGJBaseGameLayer*);
 
-    void tryAbsorbToPlayer(ProGJBaseGameLayer* bgl, PlayerObject* player, GameObject* obj, ObjectState& state, bool& isFloating, float& scaleMult, std::vector<GameObject*>& toRemove);
+    void tryAbsorbToPlayer(ProGJBaseGameLayer* bgl, PlayerObject* player, GameObject* obj, ObjectState& state, bool& isFloating, float& scaleMult1, float& scaleMult2, std::vector<GameObject*>& toRemove);
 
     float getRandomRotation();
     

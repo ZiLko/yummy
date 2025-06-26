@@ -71,8 +71,7 @@ void AnimationManager::updateAnimations(float dt, ProGJBaseGameLayer* bgl) {
         float rot = (state.targetRotation - state.startRotation) * state.time / 2.f;
         obj->setRotation(state.startRotation + rot);
         
-        AnimationManager::tryAbsorbToPlayer(bgl, bgl->m_player1, obj, state, isFloating, f->m_scaleMultiplier, toRemove);
-        if (bgl->m_gameState.m_isDualMode) AnimationManager::tryAbsorbToPlayer(bgl, bgl->m_player2, obj, state, isFloating, f->m_scaleMultiplierPlayerTwo, toRemove);
+        AnimationManager::tryAbsorbToPlayer(bgl, bgl->m_player1, obj, state, isFloating, f->m_scaleMultiplier, f->m_scaleMultiplierPlayerTwo, toRemove);
     }
     
     for (GameObject* obj : toRemove) {
@@ -84,7 +83,7 @@ void AnimationManager::updateAnimations(float dt, ProGJBaseGameLayer* bgl) {
     }
 }
 
-void AnimationManager::tryAbsorbToPlayer(ProGJBaseGameLayer* bgl, PlayerObject* player, GameObject* obj, ObjectState& state, bool& isFloating, float& scaleMult, std::vector<GameObject*>& toRemove) {
+void AnimationManager::tryAbsorbToPlayer(ProGJBaseGameLayer* bgl, PlayerObject* player, GameObject* obj, ObjectState& state, bool& isFloating, float& scaleMult1, float& scaleMult2, std::vector<GameObject*>& toRemove) {
     if (std::find(toRemove.begin(), toRemove.end(), obj) != toRemove.end()) return; // dont push back same obj to the vector twice
     CCPoint targetPos = ccpLerp(obj->getPosition(), player->getPosition(), state.time / 25.f);
         
@@ -98,7 +97,8 @@ void AnimationManager::tryAbsorbToPlayer(ProGJBaseGameLayer* bgl, PlayerObject* 
         if (!isFloating) {
             obj->m_isDisabled  = true;
             obj->m_isDisabled2 = true;
-            scaleMult += GROW_RATE;
+            scaleMult1 += GROW_RATE;
+            scaleMult2 += GROW_RATE;
         }
         
         toRemove.push_back(obj);
