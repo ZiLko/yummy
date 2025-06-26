@@ -1,0 +1,25 @@
+{
+	"geode": "4.5.0",
+	"gd": {
+		"win": "2.2074",
+		"android": "2.2074",
+		"mac": "2.2074",
+		"ios": "2.2074"
+	},
+	"id": "zilko.yummy",
+	"name": "Yummy!",
+	"version": "v1.0.0",
+	"developer": "Zilko",
+	"description": "Eat yu",
+	"dependencies": {
+			"geode.custom-keybinds": {
+				"importance": "required",
+				"version": ">=1.10.3"
+			}
+	},
+	"resources": {
+			"files": [
+            "resources/boop.mp3"
+        ]
+    }
+}
