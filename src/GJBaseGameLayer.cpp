@@ -4,16 +4,20 @@
 #include <random>
 
 void ProGJBaseGameLayer::startEating() {
+    if (LevelEditorLayer::get()) return;
     m_fields->m_isEating = true;
 }
 
 void ProGJBaseGameLayer::stopEating() {
+    if (LevelEditorLayer::get()) return;
     m_fields->m_isEating = false;
     AnimationManager::get().stopAbsorbingAll(m_player1->getPosition());
+    AnimationManager::get().stopAbsorbingAll(m_player2->getPosition());
 }
 
 void ProGJBaseGameLayer::processCommands(float dt) {
     GJBaseGameLayer::processCommands(dt);
+    if (LevelEditorLayer::get()) return;
     
     AnimationManager::get().updateAnimations(dt, this);
     
@@ -24,6 +28,12 @@ void ProGJBaseGameLayer::processCommands(float dt) {
     m_player1->m_stateScale = f->m_scaleMultiplier;
     m_player1->m_spriteWidthScale = f->m_scaleMultiplier;
     m_player1->m_spriteHeightScale = f->m_scaleMultiplier;
+    
+    m_player2->m_vehicleSize = f->m_scaleMultiplierPlayerTwo;
+    m_player2->setScale(f->m_scaleMultiplierPlayerTwo);
+    m_player2->m_stateScale = f->m_scaleMultiplierPlayerTwo;
+    m_player2->m_spriteWidthScale = f->m_scaleMultiplierPlayerTwo;
+    m_player2->m_spriteHeightScale = f->m_scaleMultiplierPlayerTwo;
     
     if (f->m_scaleMultiplier > 1.f) {
         m_gameState.tweenValue(m_gameState.m_cameraZoom, std::pow(f->m_scaleMultiplier, -0.642f), 14, 0.2f, 1, 1, 0, 0);
@@ -38,6 +48,7 @@ void ProGJBaseGameLayer::processCommands(float dt) {
 
 void ProGJBaseGameLayer::processMoveActions() {
     GJBaseGameLayer::processMoveActions();
+    if (LevelEditorLayer::get()) return;
     
     //m_effectManager->m_unkVector6d8.size(), m_effectManager->m_unkVector6f0.size()
     auto f = m_fields.self();
@@ -50,14 +61,15 @@ void ProGJBaseGameLayer::processMoveActions() {
             AnimationManager::get().tryStartAbsorbing(obj);
         }
     }
-     
+
     // for (CCMoveCNode* obj : m_effectManager->m_unkVector6c0) {
-         
+
     // }
 }
 
-void ProGJBaseGameLayer::collisionCheckObjects(PlayerObject* p0, std::vector<GameObject*>* p1, int p2, float p3) {      
-    GJBaseGameLayer::collisionCheckObjects(p0, p1, p2, p3);
+void ProGJBaseGameLayer::collisionCheckObjects(PlayerObject* player, gd::vector<GameObject*>* p1, int p2, float p3) {      
+    GJBaseGameLayer::collisionCheckObjects(player, p1, p2, p3);
+    if (LevelEditorLayer::get() || player != m_player1) return;
     
     auto f = m_fields.self();
     
@@ -65,20 +77,21 @@ void ProGJBaseGameLayer::collisionCheckObjects(PlayerObject* p0, std::vector<Gam
     
     f->m_checkCollisions--;
         
-    for (GameObject* obj : *p1) {
+    for (int i = 0; i < p2; i++) {
+        GameObject* obj = p1->at(i);
+        if (!obj) continue;
         bool valid = false;
         
         if (f->m_collisionDirection == PlayerCollisionDirection::Top)
-            valid = obj->getPositionY() > m_player1->getPositionY();
+            valid = obj->getPositionY() > player->getPositionY();
         else if (f->m_collisionDirection == PlayerCollisionDirection::Bottom)
-            valid = obj->getPositionY() < m_player1->getPositionY();
+            valid = obj->getPositionY() < player->getPositionY();
         else if (f->m_collisionDirection == PlayerCollisionDirection::Left) 
-            valid = obj->getPositionX() < m_player1->getPositionX();
+            valid = obj->getPositionX() < player->getPositionX();
         else if (f->m_collisionDirection == PlayerCollisionDirection::Right)
-            valid = obj->getPositionX() > m_player1->getPositionX();
+            valid = obj->getPositionX() > player->getPositionX();
         
-        if (valid && !f->m_destroyedObjects.contains(obj))
-            f->m_destroyObjects.push_back(obj);
+        if (valid && !f->m_destroyedObjects.contains(obj)) f->m_destroyObjects.push_back(obj);
     }
     
     if (f->m_checkCollisions > 0) return;
@@ -86,17 +99,17 @@ void ProGJBaseGameLayer::collisionCheckObjects(PlayerObject* p0, std::vector<Gam
     int destroyedObjects = 0;
     
     for (GameObject* obj : f->m_destroyObjects) {
-        if (f->m_destroyedObjects.contains(obj)) continue;
+        if (!obj || f->m_destroyedObjects.contains(obj)) continue;
         float playerPos = 0.f;
         float objPos = 0.f;
         float half = 20 * f->m_scaleMultiplier;
         
         if (f->m_collisionDirection == PlayerCollisionDirection::Top || f->m_collisionDirection == PlayerCollisionDirection::Bottom) {
             objPos = obj->getPositionX();
-            playerPos = m_player1->getPositionX();
+            playerPos = player->getPositionX();
         } else {
             objPos = obj->getPositionY();
-            playerPos = m_player1->getPositionY();
+            playerPos = player->getPositionY();
         }
         
         if (!(objPos > playerPos - half && objPos < playerPos + half)) continue;
@@ -119,6 +132,24 @@ void ProGJBaseGameLayer::collisionCheckObjects(PlayerObject* p0, std::vector<Gam
         AnimationManager::destroyObject(obj, 3, m_objectLayer, DestroyAnimation::Break);
     }
     
-    if (destroyedObjects >= 8)
-        shakeCamera(destroyedObjects / 10.f * 0.09f, destroyedObjects / 10.f * 0.09f, 0);
+    if (destroyedObjects >= 8) shakeCamera(destroyedObjects / 10.f * 0.09f, destroyedObjects / 10.f * 0.09f, 0);
+}
+
+void ProGJBaseGameLayer::resetLevelVariables() {
+    GJBaseGameLayer::resetLevelVariables();
+    if (!LevelEditorLayer::get()) ProGJBaseGameLayer::resetYummyFieldsVariables();
+}
+
+void ProGJBaseGameLayer::resetYummyFieldsVariables() {
+    auto f = m_fields.self();
+    f->m_scaleMultiplier = 1.f;
+    f->m_scaleMultiplierPlayerTwo = 1.f;
+    f->m_checkCollisions = 0;
+    f->m_isEating = false;
+}
+
+void ProGJBaseGameLayer::reactToPlayerScaleToggle(PlayerObject* player, bool toMini) {
+    auto f = m_fields.self();
+    if (player == m_player1) f->m_scaleMultiplier *= toMini ? .6f : (1.f / .6f);
+    else if (player == m_player2) f->m_scaleMultiplierPlayerTwo *= toMini ? .6f : (1.f / .6f);
 }

@@ -14,12 +14,34 @@
 	"dependencies": {
 			"geode.custom-keybinds": {
 				"importance": "required",
-				"version": ">=1.10.3"
+				"version": ">=1.10.3",
+				"platforms": ["android", "win", "mac"]
 			}
 	},
 	"resources": {
-			"files": [
+		"sprites": [
+            "resources/consume.png"
+        ],
+		"files": [
             "resources/boop.mp3"
         ]
-    }
+    },
+	"settings": {
+		"volume": {
+			"name": "Volume (%)",
+			"type": "int",
+			"default": 25,
+			"min": 0,
+			"max": 100,
+			"control": {
+				"input": true,
+				"slider": true,
+				"arrows": true,
+				"big-arrows": true,
+				"arrow-step": 1,
+				"big-arrow-step": 5,
+				"slider-step": 1
+			}
+		}
+	}
 }

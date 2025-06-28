@@ -26,3 +26,11 @@ struct ObjectState {
     bool wasEaten = false;
     CCPoint floatTo = ccp(0, 0);
 };
+
+namespace Vars {
+    inline float volumeSetting = 100.f;
+    inline float getVolume() {
+        log::info("volumeSetting: {}", volumeSetting);
+        return volumeSetting;
+    }
+}

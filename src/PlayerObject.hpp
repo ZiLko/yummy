@@ -19,8 +19,7 @@ class $modify(ProPlayerObject, PlayerObject) {
     
     void incrementJumps();
     
-    void togglePlayerScale(bool, bool);
-    
     void collidedWithObject(float, GameObject*, CCRect, bool);
-    
+
+    void togglePlayerScale(bool toMini, bool fromPortal);
 };

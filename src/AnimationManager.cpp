@@ -1,6 +1,5 @@
 #include "AnimationManager.hpp"
 #include "GJBaseGameLayer.hpp"
-
 #include <random>
 
 AnimationManager& AnimationManager::get() {
@@ -56,7 +55,7 @@ void AnimationManager::updateAnimations(float dt, ProGJBaseGameLayer* bgl) {
     // log::debug("{}", m_animatingObjects.size());
     
     for (GameObject* obj : m_animatingObjects) {
-        if (!m_objectStates.contains(obj) || animated.contains(obj)) continue;
+        if (!obj || !m_objectStates.contains(obj) || animated.contains(obj)) continue;
         
         ObjectState& state = m_objectStates.at(obj);
         bool isFloating = state.animation == ObjectAnimation::Float;
@@ -72,23 +71,7 @@ void AnimationManager::updateAnimations(float dt, ProGJBaseGameLayer* bgl) {
         float rot = (state.targetRotation - state.startRotation) * state.time / 2.f;
         obj->setRotation(state.startRotation + rot);
         
-        CCPoint targetPos = ccpLerp(obj->getPosition(), bgl->m_player1->getPosition(), state.time / 25.f);
-        
-        CCPoint delta = targetPos - obj->getPosition();
-        CCArray* moveArray = CCArray::create(obj, nullptr);
-        bgl->moveObjects(moveArray, delta.x, delta.y, false);
-        
-        // log::debug("{}", progress);
-        
-        if (ccpDistance(bgl->m_player1->getPosition(), obj->getPosition()) < 20 * f->m_scaleMultiplier) {
-            if (!isFloating) {
-                obj->m_isDisabled  = true;
-                obj->m_isDisabled2 = true;            
-                f->m_scaleMultiplier += GROW_RATE;
-            }
-            
-            toRemove.push_back(obj);
-        }
+        AnimationManager::tryAbsorbToPlayer(bgl, bgl->m_player1, obj, state, isFloating, f->m_scaleMultiplier, f->m_scaleMultiplierPlayerTwo, toRemove);
     }
     
     for (GameObject* obj : toRemove) {
@@ -96,8 +79,29 @@ void AnimationManager::updateAnimations(float dt, ProGJBaseGameLayer* bgl) {
         
         auto it = std::find(m_animatingObjects.begin(), m_animatingObjects.end(), obj);
         
-        if (it != m_animatingObjects.end())
-            m_animatingObjects.erase(it);
+        if (it != m_animatingObjects.end()) m_animatingObjects.erase(it);
+    }
+}
+
+void AnimationManager::tryAbsorbToPlayer(ProGJBaseGameLayer* bgl, PlayerObject* player, GameObject* obj, ObjectState& state, bool& isFloating, float& scaleMult1, float& scaleMult2, std::vector<GameObject*>& toRemove) {
+    if (std::find(toRemove.begin(), toRemove.end(), obj) != toRemove.end()) return; // dont push back same obj to the vector twice
+    CCPoint targetPos = ccpLerp(obj->getPosition(), player->getPosition(), state.time / 25.f);
+        
+    CCPoint delta = targetPos - obj->getPosition();
+    CCArray* moveArray = CCArray::create(obj, nullptr);
+    bgl->moveObjects(moveArray, delta.x, delta.y, false);
+    
+    // log::debug("{}", progress);
+    
+    if (ccpDistance(player->getPosition(), obj->getPosition()) < 20 * scaleMult1) {
+        if (!isFloating) {
+            obj->m_isDisabled  = true;
+            obj->m_isDisabled2 = true;
+            scaleMult1 += GROW_RATE;
+            scaleMult2 += GROW_RATE;
+        }
+        
+        toRemove.push_back(obj);
     }
 }
 
@@ -140,15 +144,14 @@ void AnimationManager::destroyObject(GameObject* obj, int pieces, CCNode* object
 }
 
 
-void AnimationManager::playSound(const std::string& soundStr) {
+void AnimationManager::playResourcesSound(const std::string& soundStr) {
     auto system = FMODAudioEngine::sharedEngine()->m_system;
     log::debug("d");
         
     FMOD::Sound* sound;
     FMOD::Channel* c;
 
-    FMOD_RESULT result;
-    result = system->createSound((Mod::get()->getResourcesDir() / soundStr).string().c_str(), FMOD_DEFAULT, nullptr, &sound);
-
-    result = system->playSound(sound, nullptr, false, &c);
+    system->createSound((Mod::get()->getResourcesDir() / soundStr).string().c_str(), FMOD_DEFAULT, nullptr, &sound);
+    system->playSound(sound, nullptr, false, &c);
+    c->setVolume(Vars::getVolume() / 100.f);
 }
